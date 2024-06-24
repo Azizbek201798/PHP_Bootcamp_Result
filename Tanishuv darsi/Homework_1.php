@@ -7,7 +7,7 @@ $name = trim($name);
 echo "Familiyangiz : ";
 $surname = fgets(STDIN);
 $surname = trim($surname);
-
+ 
 echo "Yoshingiz : ";
 $age = fgets(STDIN);
 $age = trim($age);
