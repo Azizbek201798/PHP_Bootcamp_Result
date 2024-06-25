@@ -3,7 +3,7 @@
 echo "Ismingiz : ";
 $name = fgets(STDIN);
 $name = trim($name);
-
+echo 1;
 echo "Familiyangiz : ";
 $surname = fgets(STDIN);
 $surname = trim($surname);
