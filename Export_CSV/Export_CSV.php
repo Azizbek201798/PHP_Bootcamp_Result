@@ -151,7 +151,13 @@ $rows = $data->fetchAllRows();
                 <td><?php echo $row['arrived_at']; ?></td>
                 <td><?php echo $row['leaved_at']; ?></td>
                 <td><?php echo $row['required_work']; ?></td>
-                <td><?php echo ($row['worked_off'] == 1) ? 'Yes' : 'No'; ?></td>
+                <td>
+                    <?php if ($row['worked_off'] == 1) : ?>
+                        <button type="button" class="btn btn-primary">Done</button>
+                    <?php else : ?>
+                        <input type="checkbox" checked disabled>
+                    <?php endif; ?>
+                </td>
             </tr>
         <?php endforeach; ?>
         <?php endif; ?>
