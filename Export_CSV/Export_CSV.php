@@ -7,12 +7,24 @@ class Workly {
     public $dbname;
     public $host;
     public $pdo;
+    public $total;
 
     public function __construct($username, $password, $dbname, $host) {
         $this->username = $username;
         $this->password = $password;
         $this->dbname = $dbname;
         $this->host = $host;
+    }
+
+    public function calculateTotal() {
+        try {
+            $query = "SELECT SUM(required_work) as total FROM daily WHERE worked_off = 1";
+            $stmt = $this->pdo->query($query);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->total = $result['total'];
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
 
     public function connect() {
@@ -37,35 +49,33 @@ class Workly {
 
     public function exportData() {
         try {
-            // Fetch all rows from the 'daily' table
             $query = "SELECT * FROM daily";
             $stmt = $this->pdo->query($query);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            // Set headers for CSV download
             header('Content-Type: text/csv; charset=utf-8');
             header('Content-Disposition: attachment; filename=workly_data.csv');
 
-            // Open a file pointer connected to php://output
             $output = fopen('php://output', 'w');
 
-            // Write headers to the CSV file
             fputcsv($output, ['Arrived at', 'Leaved at', 'Required work off', 'Worked off']);
 
-            // Loop through rows and write each row to the CSV
+            $total = 0;
+
             foreach ($rows as $row) {
+            
                 $arrived_at = new DateTime($row['arrived_at']);
                 $leaved_at = new DateTime($row['leaved_at']);
-                $requiredWorkHours = DateTime::createFromFormat('H:i:s', '09:00:00');
                 $debtInSeconds = $row['required_work'];
 
-                // Format the required work in hours and minutes
+                if ($row['worked_off'] = 1){
+                    $total += $row['required_work'];
+                }
+
                 $requiredWork = ($debtInSeconds > 0) ? gmdate('H:i', $debtInSeconds) : '0 min';
 
-                // Determine worked off status
                 $workedOff = ($row['worked_off'] == 1) ? 'Yes' : 'No';
 
-                // Write row data to CSV
                 fputcsv($output, [
                     $arrived_at->format('Y-m-d H:i:s'),
                     $leaved_at->format('Y-m-d H:i:s'),
@@ -74,10 +84,9 @@ class Workly {
                 ]);
             }
 
-            // Close file pointer
-            fclose($output);
+            $this->total = $total;
 
-            // Terminate script after download
+            fclose($output);
             exit();
 
         } catch (PDOException $e) {
@@ -86,17 +95,15 @@ class Workly {
     }
 }
 
-// Initialize Workly object and connect to database
 $data = new Workly('root', 'root', 'Workly', 'localhost');
 $data->connect();
 
-// Handle export request
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['export'])) {
     $data->exportData();
 }
 
-// Fetch all rows from the 'daily' table
 $rows = $data->fetchAllRows();
+$data->calculateTotal();
 
 ?>
 <!DOCTYPE html>
@@ -150,9 +157,19 @@ $rows = $data->fetchAllRows();
                 <td><?php echo $index + 1; ?></td>
                 <td><?php echo $row['arrived_at']; ?></td>
                 <td><?php echo $row['leaved_at']; ?></td>
-                <td><?php echo $row['required_work']; ?></td>
                 <td>
-                    <?php if ($row['worked_off'] == 1) : ?>
+                    <?php
+
+                        if ($row['required_work'] >= 3060){
+                            echo ( (int)($row['required_work'] / 3600) . " hours " . (int)($row['required_work'] % 3060) / 60 . " mins"); 
+                        } else {
+                            echo (int)($row['required_work'] % 3060) / 60 . " mins";
+                        }
+                        
+                    ?>
+                </td>
+                <td>
+                    <?php if ($row['worked_off'] == 1) :  ?>
                         <button type="button" class="btn btn-primary">Done</button>
                     <?php else : ?>
                         <input type="checkbox" checked disabled>
@@ -160,9 +177,14 @@ $rows = $data->fetchAllRows();
                 </td>
             </tr>
         <?php endforeach; ?>
+        
+        
         <?php endif; ?>
         </tbody>
     </table>
+
+    <h4> <?php echo "Total work of time : " . ( (int)($data->total / 3600) . " hours " . (int)($data->total % 3060) / 60 . " mins") ?> </h4>
+
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
