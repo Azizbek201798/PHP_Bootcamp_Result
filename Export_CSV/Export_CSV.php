@@ -15,6 +15,7 @@ class Workly {
         $this->dbname = $dbname;
         $this->host = $host;
     }
+    
 
     public function connect() {
         try {
