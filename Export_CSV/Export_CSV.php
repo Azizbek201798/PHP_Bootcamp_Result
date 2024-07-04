@@ -7,7 +7,6 @@ class Workly {
     public $dbname;
     public $host;
     public $pdo;
-    public $total_debt;
 
     public function __construct($username, $password, $dbname, $host) {
         $this->username = $username;
@@ -15,7 +14,6 @@ class Workly {
         $this->dbname = $dbname;
         $this->host = $host;
     }
-    
 
     public function connect() {
         try {
@@ -37,80 +35,68 @@ class Workly {
         }
     }
 
-  public function updateWorkedOff() {
-    try {
-        if (isset($_GET['id'])) {
-            $id = $_GET['id'];
-            $query = "UPDATE daily SET worked_off = 0 WHERE id = :id";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindValue(":id", $id);
-            $stmt->execute();
-        }
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
-}
-
-    public function insertData($arrivedAt, $leavedAt, $requiredWork, $workedOff) {
+    public function exportData() {
         try {
-            $query = "INSERT INTO daily (arrived_at, leaved_at, required_work, worked_off) VALUES (:arrivedAt, :leavedAt, :requiredWork, :workedOff);";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindValue(":arrivedAt", $arrivedAt->format('Y-m-d H:i:s')); 
-            $stmt->bindValue(":leavedAt", $leavedAt->format('Y-m-d H:i:s'));
-            $stmt->bindValue(":requiredWork", $requiredWork);
-            $stmt->bindValue(":workedOff", $workedOff);
-            $stmt->execute();
+            // Fetch all rows from the 'daily' table
+            $query = "SELECT * FROM daily";
+            $stmt = $this->pdo->query($query);
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Set headers for CSV download
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename=workly_data.csv');
+
+            // Open a file pointer connected to php://output
+            $output = fopen('php://output', 'w');
+
+            // Write headers to the CSV file
+            fputcsv($output, ['Arrived at', 'Leaved at', 'Required work off', 'Worked off']);
+
+            // Loop through rows and write each row to the CSV
+            foreach ($rows as $row) {
+                $arrived_at = new DateTime($row['arrived_at']);
+                $leaved_at = new DateTime($row['leaved_at']);
+                $requiredWorkHours = DateTime::createFromFormat('H:i:s', '09:00:00');
+                $debtInSeconds = $row['required_work'];
+
+                // Format the required work in hours and minutes
+                $requiredWork = ($debtInSeconds > 0) ? gmdate('H:i', $debtInSeconds) : '0 min';
+
+                // Determine worked off status
+                $workedOff = ($row['worked_off'] == 1) ? 'Yes' : 'No';
+
+                // Write row data to CSV
+                fputcsv($output, [
+                    $arrived_at->format('Y-m-d H:i:s'),
+                    $leaved_at->format('Y-m-d H:i:s'),
+                    $requiredWork,
+                    $workedOff
+                ]);
+            }
+
+            // Close file pointer
+            fclose($output);
+
+            // Terminate script after download
+            exit();
+
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
     }
-
 }
 
-$data = new Workly('root','root','Workly','localhost');
+// Initialize Workly object and connect to database
+$data = new Workly('root', 'root', 'Workly', 'localhost');
 $data->connect();
+
+// Handle export request
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['export'])) {
+    $data->exportData();
+}
+
+// Fetch all rows from the 'daily' table
 $rows = $data->fetchAllRows();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    $arrivedAt = new DateTime($_POST['arrived_at']);
-    $leavedAt = new DateTime($_POST['leaved_at']);
-    
-    if ($leavedAt < $arrivedAt) {
-        
-        $requiredWork = 0;
-    
-    } else {
-        $duration = $leavedAt->getTimestamp() - $arrivedAt->getTimestamp();;
-        $intervalInSeconds = $duration;
-        
-        if ($intervalInSeconds > 32400){
-            $requiredWork = 0;
-        } else {
-            $requiredWork = 32400 - $intervalInSeconds;
-        }
-    }
-
-    if ($requiredWork > 0) {
-        $workedOff = 1;
-    } else {
-        $workedOff = 0;
-    }
-
-    $data->insertData($arrivedAt, $leavedAt, $requiredWork, $workedOff);
-
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
-
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $data->updateWorkedOff($id);
-
-    header("Location: {$_SERVER['PHP_SELF']}");
-    exit();
-}
 
 ?>
 <!DOCTYPE html>
@@ -123,7 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
             font-family: "Times New Roman", Times, serif;
         }
     </style>
-    
 </head>
 <body>
 
@@ -131,108 +116,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     <h1 class="text-center mb-10">PWOT - Personal Work Off Tracker</h1>
 
     <form method="post" action="" class="mb-4">
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="arrived_at">Arrived at</label>
-            <input type="datetime-local" class="form-control" name="arrived_at" required>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="arrived_at">Arrived at</label>
+                <input type="datetime-local" class="form-control" name="arrived_at" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="leaved_at">Leaved at</label>
+                <input type="datetime-local" class="form-control" name="leaved_at" required>
+            </div>
+            <div class="form-group col-md-4 align-self-end">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <span style="margin-left: 30px;"></span>
+                <a href="?export=true" class="btn btn-primary ml-2">Export</a>
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <label for="leaved_at">Leaved at</label>
-            <input type="datetime-local" class="form-control" name="leaved_at" required>
-        </div>
-        <div class="form-group col-md-4 align-self-end">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <span style="margin-left: 30px;"></span>
-            <button type="button" class="btn btn-primary ml-2" onclick="exportData()">Export</button>
-    </div>
-</form>
+    </form>
 
     <table class="table table-bordered">
-    <thead class="thead-dark">
-        <tr>
-            <th>#</th>
-            <th>Arrived at</th>
-            <th>Leaved at</th>
-            <th>Required work off</th>
-            <th>Worked off</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php if (!empty($rows)) : ?>
-    <?php
-    $total_debt = 0;
-
-    foreach ($rows as $index => $row) {
-
-        $arrived_at = new DateTime($row['arrived_at']);
-        $leaved_at = new DateTime($row['leaved_at']);
-        $requiredWorkHours = DateTime::createFromFormat('H:i:s', '09:00:00');
-        $debtInSeconds = $row['required_work'];
-
-        if ($row['worked_off'] == 1){
-            $total_debt += $row['required_work'];
-        }
-
-        ?>
-        <tr>
-            <tr <?php echo ($row['worked_off'] == 0) ? 'style="background-color: #A2E4A4;"' : ''; ?>>
-            <td><?php echo $index + 1; ?></td>
-            <td><?php echo $arrived_at->format('Y-m-d H:i:s'); ?></td>
-            <td><?php echo $leaved_at->format('Y-m-d H:i:s'); ?></td>
-            <td><?php
-                if ($debtInSeconds > 0)  {
-                    if (($debtInSeconds / 60) >= 60) {
-                        echo (int)($debtInSeconds / 3600) . ' hours and ' . (int)(($debtInSeconds % 3600) / 60) . " min";
-                    } else {
-                        echo (int)($debtInSeconds / 60) . " min";
-                    }
-                } else {
-                    echo "0 min.";
-                }
-                ?></td>
-            <td>
-            <?php if ($debtInSeconds > 0) : ?>
-                    <button type="button" class="btn btn-primary" onclick="confirmAction(this)">Done</button>
-                    <input type="checkbox" class="done-checkbox" style="display: none;" <?php echo ($row['worked_off'] == 0) ? 'checked="checked"' : ''; ?>>
-            <?php elseif($row['worked_off'] == 0) : ?>
-                <input type="checkbox" checked disabled>
-            <?php endif; ?>
-                </td>
-        </tr>
-    <?php } ?>
-<?php endif; ?>
-    </tbody>
-</table>
-    <h5>Total Work Of Time : <?php echo (int)($total_debt / 3600) . ' hours and ' . (int)(($total_debt%3600) / 60) . " min"?> </h5>
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Arrived at</th>
+                <th>Leaved at</th>
+                <th>Required work off</th>
+                <th>Worked off</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php if (!empty($rows)) : ?>
+        <?php foreach ($rows as $index => $row) : ?>
+            <tr>
+                <td><?php echo $index + 1; ?></td>
+                <td><?php echo $row['arrived_at']; ?></td>
+                <td><?php echo $row['leaved_at']; ?></td>
+                <td><?php echo $row['required_work']; ?></td>
+                <td><?php echo ($row['worked_off'] == 1) ? 'Yes' : 'No'; ?></td>
+            </tr>
+        <?php endforeach; ?>
+        <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script>
-
-function confirmAction(button) {
-    var confirmed = confirm("Are you sure?");
-    if (confirmed) {
-        var checkbox = button.nextElementSibling;
-        checkbox.checked = true;
-        button.style.display = 'none';
-        checkbox.style.display = 'inline';
-
-        var row = button.closest('tr');
-        row.style.backgroundColor = "#A2E4A4";
-    }
-}
-
-</script>
-
-<script>
-    function exportData() {
-        // Add your export logic here
-        // This function will be called when the Export button is clicked
-    }
-</script>
 
 </body>
 </html>
