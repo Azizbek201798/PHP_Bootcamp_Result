@@ -8,6 +8,7 @@ class Workly {
     public $host;
     public $pdo;
     public $total_debt;
+    public $total;
 
     public function __construct($username, $password, $dbname, $host) {
         $this->username = $username;
@@ -25,9 +26,10 @@ class Workly {
         }
     }
 
-    public function fetchAllRows() {
+    public function fetchAllRows($page = 1 , $limit) {
         try {
-            $query = "SELECT * FROM daily LIMIT 5;";
+            $offset = ($page - 1) * $limit;
+            $query = "SELECT * FROM daily LIMIT $offset,$limit;";
             $stmt = $this->pdo->query($query);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $rows;
@@ -111,7 +113,13 @@ class Workly {
 
 $data = new Workly('root','root','Workly','localhost');
 $data->connect();
-$rows = $data->fetchAllRows();
+
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+$limit = 5;
+$totalRows = count($data->fetchAllRows(1, $limit)); 
+$totalPages = ceil($totalRows / $limit); 
+$rows = $data->fetchAllRows($page, $limit);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['export'])) {
     $data->exportData();
@@ -153,7 +161,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['daily_id'])) {
     $id = $_GET['daily_id'];
     $data->updateWorkedOff($id);
-
     header("Location: {$_SERVER['PHP_SELF']}");
     exit();
 }
@@ -177,7 +184,7 @@ if (isset($_GET['daily_id'])) {
     <h1 class="text-center mb-10">PWOT - Personal Work Off Tracker</h1>
 
     <form method="post" action="" class="mb-4">
-    <div class="form-row">
+        <div class="form-row">
         <div class="form-group col-md-4">
             <label for="arrived_at">Arrived at</label>
             <input type="datetime-local" class="form-control" name="arrived_at" required>
@@ -191,18 +198,38 @@ if (isset($_GET['daily_id'])) {
             <span style="margin-left: 30px;"></span>
             <a href="?export=true" class="btn btn-success ml-2">Export as CSV</a>
         </div>
-    </div>
-</form>
+        </div>
+    </form>
 
     <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
+    <ul class="pagination justify-content-center">
+        <?php if ($page > 1) : ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $page - 1; ?>">Previous</a>
+            </li>
+        <?php else: ?>
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+            <li class="page-item <?php echo $page == $i ? 'active' : ''; ?>">
+                <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
+
+        <?php if ($page < $totalPages) : ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $page + 1; ?>">Next</a>
+            </li>
+        <?php else: ?>
+            <li class="page-item disabled">
+                <span class="page-link">Next</span>
+            </li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
     <table class="table table-bordered">
     <thead class="thead-dark">
