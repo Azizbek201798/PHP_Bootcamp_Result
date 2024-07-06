@@ -1,10 +1,9 @@
 <?php
-
+    
     require 'CurrencyClass.php';
-
     $money = new Currency;
-
     $amount = $_POST['amount'];
+
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +11,6 @@
 
 <head>
 
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Currency Convertor</title>
     <style>
@@ -40,7 +38,6 @@
             </select>
             
                 <fieldset>
-                
                     <legend>Currency Convertor</legend>
                         <div class="mb-3">
                             <label for="amount" class="form-label">UZS => USD</label>
