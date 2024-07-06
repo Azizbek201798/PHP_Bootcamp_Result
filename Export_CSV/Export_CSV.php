@@ -170,6 +170,7 @@ if (isset($_GET['daily_id'])) {
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>PWOT - Personal Work Off Tracker</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -178,6 +179,7 @@ if (isset($_GET['daily_id'])) {
         }
     </style>
 </head>
+
 <body>
 
 <div class="container mt-5">
@@ -309,7 +311,7 @@ if (isset($_GET['daily_id'])) {
     <?php } ?>
         <?php endif; ?>
     </tbody>
-</table>
+    </table>
     <h5>Total Work Of Time : <?php echo (int)($total_debt / 3600) . ' hours and ' . (int)(($total_debt%3600) / 60) . " min"?> </h5>
 </div>
 
@@ -317,3 +319,4 @@ if (isset($_GET['daily_id'])) {
 
 </body>
 </html>
+
