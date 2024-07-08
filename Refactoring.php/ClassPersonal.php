@@ -11,28 +11,35 @@ class PersonalWorkOffTracker {
     public function addRecord($arrived_at, $leaved_at) {
         $arrived_at_dt = new DateTime($arrived_at);
         $leaved_at_dt = new DateTime($leaved_at); 
+        $worked_off = null;
 
         $interval = $arrived_at_dt->diff($leaved_at_dt);
         $seconds = $interval->s;
-
+        var_dump($seconds);
         $required_work = $seconds;
 
-        $sql = "INSERT INTO daily (arrived_at, leaved_at, required_work) VALUES (:arrived_at, :leaved_at, :required_work)";
+        if($required_work > 32400){
+            $worked_off = 0;
+        } else {
+            $worked_off = 1;
+        }
+
+
+        $sql = "INSERT INTO daily (arrived_at, leaved_at, required_work, worked_off) VALUES (:arrived_at, :leaved_at, :required_work, :worked_off)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':arrived_at', $arrived_at);
         $stmt->bindParam(':leaved_at', $leaved_at);
         $stmt->bindParam(':required_work', $required_work);
+        $stmt->bindParam(':worked_off', $worked_off);
 
         $stmt->execute();
-
     }
 
     public function fetchRecords($page_id) {
         $offset = ($page_id - 1) * 5;
         $sql = "SELECT * FROM daily ORDER BY id LIMIT $offset, 5";
         $result = $this->conn->query($sql);
-        $total_hours = 0;
-        $total_minutes = 0;
+        $total_seconds = 0;
 
         if ($result->rowCount() > 0) {
             echo '<form action="" method="post">';
@@ -54,16 +61,12 @@ class PersonalWorkOffTracker {
                 echo '<td><button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#confirmModal" data-id="' . $row["id"] . '">Done</button></td>';
                 echo '</tr>';
 
-                if (!$row["worked_off"]) {
-                    list($hours, $minutes, $seconds) = explode(':', $row["required_work"]);
-                    $total_hours += (int)$hours;
-                    $total_minutes += (int)$minutes;
+                if ($row["worked_off"] == 0) {
+                    $total_seconds += (int)$row['required_work'];
                 }
             }
-            $total_hours += floor($total_minutes / 60);
-            $total_minutes = $total_minutes % 60;
-
-            echo '<tr><td colspan="4" class="text-end fw-bold">Total work off hours</td><td>' . $total_hours . ' hours and ' . $total_minutes . ' min.</td></tr>';
+            
+            echo '<tr><td colspan="4" class="text-end fw-bold">Total work off hours</td><td>' . $total_seconds . ' seconds' . ' min.</td></tr>';
             echo '</tbody>';
             echo '</table>';
             echo '<button type="submit" name="export" class="btn btn-primary">Export as CSV</button>';
