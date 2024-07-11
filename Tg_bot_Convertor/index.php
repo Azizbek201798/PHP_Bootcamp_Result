@@ -32,8 +32,8 @@ if(isset($update)){
         foreach ($data as $item) {
             $currencies[strtolower($item['Ccy'])] = $item['Rate'];
         }
-
-        $info->insertData($chat_id, $exp[0] . ":" . $exp[1], (string)(round((float)($exp[2]) / $currencies[strtolower($exp[1])],2)) . " " .  $exp[1]);
+        
+        $info->insertData($chat_id, $exp[0] . ":" . $exp[1], (string)(round((float)($exp[2]) / $currencies[strtolower($exp[1])],2)));
 
         $client->post('sendMessage', [
             'form_params' => [
