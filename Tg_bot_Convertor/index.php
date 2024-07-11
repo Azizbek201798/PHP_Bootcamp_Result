@@ -27,6 +27,7 @@
             $exp = explode('-',$text);
             $data = json_decode($currency->get("")->getBody()->getContents(),true);
 
+            $data[""] = $fromid;
             foreach($data as $current){                
                 if($current['Ccy'] == $exp[1]){
                     $text = round( ((int)$exp[0] / (int)$current[0]),2);
