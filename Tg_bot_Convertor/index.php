@@ -13,7 +13,6 @@ $client = new Client(['base_uri' => $tgApi]);
 $currency = new Client(['base_uri' => 'https://cbu.uz/oz/arkhiv-kursov-valyut/json/']);
 
 $update = json_decode(file_get_contents('php://input'), true);
-
 if(isset($update)){
     if(isset($update['$message'])){
         $message = $update['message'];
@@ -40,5 +39,4 @@ if(isset($update)){
         ]);
     }
 }
-?>
 
