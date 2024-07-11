@@ -14,39 +14,31 @@ $currency = new Client(['base_uri' => 'https://cbu.uz/oz/arkhiv-kursov-valyut/js
 
 $update = json_decode(file_get_contents('php://input'), true);
 
-if (isset($update)) {
-    if (isset($update['message'])) {
+if(isset($update)){
+    if(isset($update['$message'])){
         $message = $update['message'];
-        $chat_id = "5646244166";
+        $chat_id = $message['chat']['id'];
         $message_id = $message['message_id'];
+        $name = $message['from']['first_name'];
+        $from_id = $message['from']['id'];
         $text = $message['text'];
 
         $exp = explode('-', $text);
-        $currencyCode = strtoupper($exp[1]);
+        $data = json_decode($currency->get('')->getBody()->getContents(), true);
 
-        $response = $currency->get('');
-        $data = json_decode($response->getBody()->getContents(), true);
+        $currencies = [];
 
-        $convertedAmount = '';
-        foreach ($data as $current) {
-            if ($current['Ccy'] === $currencyCode && $current['Rate'] !== 0) {
-                $convertedAmount = round((float)$exp[0] / (float)$current['Rate'], 2);
-                break;
-            }
-        }
-
-        if ($convertedAmount !== '') {
-            $responseText = "1-$currencyCode = $convertedAmount-$exp[1]";
-        } else {
-            $responseText = "Bo'sh qiymat";
+        foreach ($data as $item) {
+            $currencies[strtolower($item['Ccy'])] = $item['Rate'];
         }
 
         $client->post('sendMessage', [
             'form_params' => [
                 'chat_id' => $chat_id,
-                'text' => $responseText,
+                'text' => 'Exchange : ' . $exp[0] / $currencies[strtolower($exp[1])],
             ],
         ]);
     }
 }
 ?>
+
