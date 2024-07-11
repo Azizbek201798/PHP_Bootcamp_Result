@@ -38,7 +38,7 @@ if (isset($update)) {
         if ($convertedAmount !== '') {
             $responseText = "1-$currencyCode = $convertedAmount-$exp[1]";
         } else {
-            $responseText = "Sorry, the conversion rate for $currencyCode is not available.";
+            $responseText = "Bo'sh qiymat";
         }
 
         $client->post('sendMessage', [
