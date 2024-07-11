@@ -33,7 +33,7 @@ if(isset($update)){
             $currencies[strtolower($item['Ccy'])] = $item['Rate'];
         }
 
-        $info->insertData($chat_id, $exp[0] . ":" . $exp[1], (string)(round((float)($exp[2]) / $currencies[strtolower($exp[1])],2)));
+        $info->insertData($chat_id, $exp[0] . ":" . $exp[1], (string)(round((float)($exp[2]) / $currencies[strtolower($exp[1])],2)) . " " .  $exp[1]);
 
         $client->post('sendMessage', [
             'form_params' => [
