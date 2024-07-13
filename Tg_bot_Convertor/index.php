@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 require 'Convertor_Class.php';
+require 'BotHandler.php';
 
 use GuzzleHttp\Client;
 
 $info = new Convertor("root","root","Workly","localhost");
+$handler = new BotHandler();
 $info->connect();
 
-$token = "7284381414:AAHv-6aSoVU2c98Z3MQug0WuEotG_qPt75o";
-$tgApi = "https://api.telegram.org/bot$token/";
+$token = $handler::API;
+$tgApi = $handler::TOKEN;
 
 $client = new Client(['base_uri' => $tgApi]);
 $currency = new Client(['base_uri' => 'https://cbu.uz/oz/arkhiv-kursov-valyut/json/']);
@@ -24,28 +26,39 @@ if(isset($update)){
         $chat_id = $message['chat']['id'];
         $text = $message['text'];
 
-        $exp = explode(':', $text);
-        $data = json_decode($currency->get('')->getBody()->getContents(), true);
-
-        $currencies = [];
-
-        foreach ($data as $item) {
-            $currencies[strtolower($item['Ccy'])] = $item['Rate'];
+        if ($text === '/start'){
+            $handler->handleStartCommand($chat_id);
+            return;
         }
+    
+        if (isset($update->callback_query)) {
+            $callbackQuery = $update->callback_query;
+            $callbackData  = $callbackQuery->data;
+            $chatId        = $callbackQuery->message->chat->id;
+            $messageId     = $callbackQuery->message->message_id;
         
-        $info->insertData($chat_id, $exp[0] . ":" . $exp[1], (string)(round((float)($exp[2]) / $currencies[strtolower($exp[1])],2)));
-
-        $client->post('sendMessage', [
-            'form_params' => [
-                'chat_id' => $chat_id,
-                'text' => round($exp[2] / $currencies[strtolower($exp[1])],2) . " " . $exp[1],
-            ],
-        ]);
+            $handler->http->post('sendMessage', [
+                'form_params' => [
+                    'chat_id' => $chatId,
+                    'text'    => "Qiymat kiriting : ",
+                ]
+            ]);
+            return;
+            
+        }
+    }
+        // $info->insertData($chat_id, $exp[0] . ":" . $exp[1], (string)(round((float)($exp[2]) / $currencies[strtolower($exp[1])],2)));
+        // $client->post('sendMessage', [
+        //     'form_params' => [
+        //         'chat_id' => $chat_id,
+        //         'text' => round($exp[2] / $currencies[strtolower($exp[1])],2) . " " . $exp[1],
+        //     ],
+        // ]);
 
     }
-}
 
 $rows = $info->fetchAllRows();
+
 ?>
 
 <!DOCTYPE html>
