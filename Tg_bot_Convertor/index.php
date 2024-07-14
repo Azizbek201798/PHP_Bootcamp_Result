@@ -3,119 +3,80 @@
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
-require 'Convertor_Class.php';
-require 'BotHandler.php';
+require 'SaveUsersData.php';
+date_default_timezone_set('Asia/Tashkent');
 
 use GuzzleHttp\Client;
 
-$info = new Convertor("root","root","Workly","localhost");
-$handler = new BotHandler();
-$info->connect();
-
-$token = $handler::API;
-$tgApi = $handler::TOKEN;
+$token = "7284381414:AAHv-6aSoVU2c98Z3MQug0WuEotG_qPt75o";
+$tgApi = "https://api.telegram.org/bot$token/";
 
 $client = new Client(['base_uri' => $tgApi]);
-$currency = new Client(['base_uri' => 'https://cbu.uz/oz/arkhiv-kursov-valyut/json/']);
 
-$update = json_decode(file_get_contents('php://input'), true);
+$update = json_decode(file_get_contents('php://input'));
 
-if(isset($update)){
-    if(isset($update['message'])){
-        $message = $update['message'];
-        $chat_id = $message['chat']['id'];
-        $text = $message['text'];
+$keyboard = [
+    'inline_keyboard' => [
+        [
+            ['text' => '🇺🇸 <=> 🇺🇿', 'callback_data' => 'usd2uzs'],
+            ['text' => '🇺🇿 <=> 🇺🇸', 'callback_data' => 'uzs2usd'],
+        ],
+    ]
+];
 
-        if ($text === '/start'){
-            $handler->handleStartCommand($chat_id);
-            return;
-        }
-    
-        if (isset($update->callback_query)) {
-            $callbackQuery = $update->callback_query;
-            $callbackData  = $callbackQuery->data;
-            $chatId        = $callbackQuery->message->chat->id;
-            $messageId     = $callbackQuery->message->message_id;
-        
-            $handler->http->post('sendMessage', [
+$saveuser = new SaveUsersData();
+
+if (isset($update->message))
+{
+    $message = $update->message;
+    $chat_id = $message->chat->id;
+    $text = $message->text;
+
+    if ($text === '/start')
+    {
+        $client->post('sendMessage', [
+            'form_params' => [
+                'chat_id' => $chat_id,
+                'text' => 'Select an exchange rate',
+                'reply_markup' => json_encode($keyboard)
+            ]
+        ]);
+    }
+
+    if (is_numeric($text))
+    {
+        $conversionType = $saveuser->sendConvertionType($chat_id);
+        if ($conversionType) {
+            $saveuser->allusersinfo($chat_id, $conversionType, (float)$text);
+            $client->post('sendMessage', [
                 'form_params' => [
-                    'chat_id' => $chatId,
-                    'text'    => "Qiymat kiriting : ",
+                    'chat_id' => $chat_id,
+                    'text' => $saveuser->getuser((float)$text, $chat_id)
                 ]
             ]);
-            return;
-            
+        } else {
+            $client->post('sendMessage', [
+                'form_params' => [
+                    'chat_id' => $chat_id,
+                    'text' => 'Error: No conversion type found.'
+                ]
+            ]);
         }
     }
-        // $info->insertData($chat_id, $exp[0] . ":" . $exp[1], (string)(round((float)($exp[2]) / $currencies[strtolower($exp[1])],2)));
-        // $client->post('sendMessage', [
-        //     'form_params' => [
-        //         'chat_id' => $chat_id,
-        //         'text' => round($exp[2] / $currencies[strtolower($exp[1])],2) . " " . $exp[1],
-        //     ],
-        // ]);
 
-    }
+}
 
-$rows = $info->fetchAllRows();
+if (isset($update->callback_query)) {
+    $callback_query = $update->callback_query;
+    $chat_id        = $callback_query->message->chat->id;
+    $callback_data  = $callback_query->data;
 
-?>
+    $saveuser->saveuser($chat_id, $callback_data);
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Converter</title>
-    <style>
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1, h3 {
-            display: inline;
-            margin-right: 20px;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Money Converter</h1><h3>1 USD = 12600 UZS</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>ChatId</th>
-                    <th>Conversion Type</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-                <?php foreach($rows as $row):?>
-                    <tr>
-                        <th><?php echo $row['id'] ?></th>
-                        <th><?php echo $row['UserId'] ?></th>
-                        <th><?php echo $row['convertation'] ?></th>
-                        <th><?php echo $row['amount'] ?></th>
-                        <th><?php echo $row['date'] ?></th>
-                    </tr>
-                <?php endforeach?>
-                
-            </thead>
-            
-        </table>
-    </div>
-</body>
-</html>
+    $client->post('sendMessage', [
+        'form_params' => [
+            'chat_id' => $chat_id,
+            'text' => 'Enter the amount:'
+        ]
+    ]);
+}
