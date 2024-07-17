@@ -17,9 +17,10 @@
     <h4>TODO app</h4>
     <form action="">
 
-        <input type="checkbox" name="option1";>Create project folder
-        <input type="checkbox" name="option1";>Git init
-        <input type="checkbox" name="option1";>Create remote git repo
+        <input type="checkbox" id="1" name="option1">
+        <label for="1">1</label><br>
+        <input type="checkbox" id="2" name="option2">
+        <label for="2">2</label><br>
 
     </form>
 </body>
