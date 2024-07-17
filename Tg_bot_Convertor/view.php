@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require 'SaveUsersData.php';
+require 'SaveUserData.php';
 
 $allusers = new SaveUsersData();
 $usersInfo = $allusers->sendAllUsersInfo();

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
-require 'SaveUsersData.php';
+require 'SaveUserData.php';
 date_default_timezone_set('Asia/Tashkent');
 
 use GuzzleHttp\Client;
@@ -18,8 +18,8 @@ $update = json_decode(file_get_contents('php://input'));
 $keyboard = [
     'inline_keyboard' => [
         [
-            ['text' => '🇺🇸 <=> 🇺🇿', 'callback_data' => 'usd2uzs'],
-            ['text' => '🇺🇿 <=> 🇺🇸', 'callback_data' => 'uzs2usd'],
+            ['text' => 'usd <=> uzs', 'callback_data' => 'usd2uzs'],
+            ['text' => 'uzs <=> usd', 'callback_data' => 'uzs2usd'],
         ],
     ]
 ];
