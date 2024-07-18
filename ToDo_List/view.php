@@ -11,7 +11,7 @@
     <?php   
         $todoList = $todo->getToDo();
         foreach($todoList as $item):
-               echo "<li>{$item['name']}</li>";
+               echo "{$item['id']}) {$item['name']}<br>";
         endforeach; 
     ?>
     </ul>
