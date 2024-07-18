@@ -19,9 +19,9 @@
     <form action="" method="post">
         <input type="checkbox">
         <input type="text" name="text">
-        <button type="submit">Add</button>
-        <button type="submit">Update</button>
-        <button type="submit">Delete</button>
+        <button type="submit" name="add">Add</button>
+        <button type="submit" name="update">Update</button>
+        <button type="submit" name="delete">Delete</button>
     </form>
 
 </body>

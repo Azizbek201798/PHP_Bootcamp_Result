@@ -20,7 +20,7 @@ class Todo{
     } 
     public function delete(string $id){
         $id = (int)$id;
-        $stmt = $this->pdo->query("DELETE FROM ToDoList WHERE id = :text;");
+        $stmt = $this->pdo->query("DELETE FROM ToDoList WHERE id = :id;");
         $stmt->bindParam(':id',$id);
         $stmt->execute();
         header("Location: index.php");
