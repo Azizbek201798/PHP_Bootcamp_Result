@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDoList</title>
-</head>
-<body>
 
     <ul>
-
-        <?php 
-            $todoList = $todo->getToDo();
-        ?>
-
         <?php
+             $todoList = $todo->getToDo();
+             var_dump($todoList);
              foreach($todoList as $item):
                 echo "<li>{$item['text']}</li>";
              endforeach;
@@ -25,6 +14,3 @@
         <input type="text" name="text">
         <button type="submit">Add</button>
     </form>
-
-</body>
-</html>
