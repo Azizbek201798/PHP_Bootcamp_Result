@@ -14,4 +14,9 @@ if(!empty($_POST)){
     }
 }
 
+if(!empty($_POST['text'])){
+    $todo->delete($_POST['text']);
+    header("Location: index.php");
+}
+
 require 'view.php';

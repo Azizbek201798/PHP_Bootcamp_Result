@@ -17,11 +17,14 @@ class Todo{
 
     public function getToDo(){
         return $this->pdo->query("SELECT * FROM ToDoList")->fetchAll(PDO::FETCH_ASSOC);
+    } 
+    public function delete(string $id){
+        $id = (int)$id;
+        $stmt = $this->pdo->query("DELETE FROM ToDoList WHERE id = :text;");
+        $stmt->bindParam(':id',$id);
+        $stmt->execute();
+        header("Location: index.php");
+        exit();
     }
- 
-    public function delete(){
-        return $this->pdo->query("");
-    }
-
     
 }
