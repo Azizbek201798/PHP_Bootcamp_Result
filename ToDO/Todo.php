@@ -21,7 +21,7 @@ class Todo
         $stmt->execute([$title]);
     }
 
-    public function toggleTodoStatus($id)
+    public function updateStatus($id)
     {
         $stmt = $this->pdo->prepare('SELECT completed FROM todos WHERE id = ?');
         $stmt->execute([$id]);
