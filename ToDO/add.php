@@ -8,5 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute([$_POST['title']]);
 
     header('Location: index.php');
+    
     exit;
 }
