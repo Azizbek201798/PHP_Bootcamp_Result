@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>To Do List</title>
 </head>
 <body>
 
@@ -11,7 +11,7 @@
     <?php   
         $todoList = $todo->getToDo();
         foreach($todoList as $item):
-               echo "<li>{$item['text']}</li>";
+               echo "<li>{$item['name']}</li>";
         endforeach; 
     ?>
     </ul>
