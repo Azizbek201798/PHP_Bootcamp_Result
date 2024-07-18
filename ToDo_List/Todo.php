@@ -16,6 +16,6 @@ class Todo{
     }
 
     public function getToDo(){
-        return $this->pdo->query('SELECT * FROM ToDoList;')->fetchAll(PDO::FETCH_ASSOC);
+        return $this->pdo->query('SELECT * FROM ToDoList')->fetchAll(PDO::FETCH_ASSOC);
     }
 }
