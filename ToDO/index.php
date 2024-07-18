@@ -16,13 +16,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>To-do List</title>
     <style>
-
-        .completed {
-            text-decoration: line-through;
-        }
-
         <?php require 'style.css'; ?>
-
     </style>
 </head>
 
@@ -41,7 +35,7 @@
     <ul class="list-group">
         <?php foreach ($todos as $todo): ?>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                <form action="toggle.php" method="POST" class="mr-3">
+                <form action="update.php" method="POST" class="mr-3">
                     <input type="hidden" name="id" value="<?php echo $todo['id']; ?>">
                     <input type="checkbox"
                            onChange="this.form.submit()" <?php if ($todo['completed']) echo 'checked'; ?>>
