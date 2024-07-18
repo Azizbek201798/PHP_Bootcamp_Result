@@ -1,1 +1,1 @@
-CREATE TABLE ToDoList(id int,name VARCHAR(128), checked boolean);
+CREATE TABLE ToDoList(id AUTO_INCREMENT int,name VARCHAR(128), checked boolean);

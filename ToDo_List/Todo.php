@@ -2,7 +2,7 @@
 
 class Todo{
     private $pdo;
-    public function __constract(PDO $pdo){
+    public function __construct(PDO $pdo){
         $this->pdo = $pdo;
     }
 
@@ -16,6 +16,7 @@ class Todo{
     }
 
     public function getToDo(){
-        return $this->pdo->query('SELECT * FROM ToDoList')->fetchAll(PDO::FETCH_ASSOC);
+        return $this->pdo->query("SELECT * FROM ToDoList")->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 }

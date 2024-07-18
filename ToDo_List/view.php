@@ -20,6 +20,8 @@
         <input type="checkbox">
         <input type="text" name="text">
         <button type="submit">Add</button>
+        <button type="submit">Update</button>
+        <button type="submit">Delete</button>
     </form>
 
 </body>
