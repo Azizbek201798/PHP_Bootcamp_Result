@@ -1,59 +1,36 @@
-<?php
-    
+<?php    
+
     require 'vendor/autoload.php';
 
+    use GuzzleHttp\Client;
+
+    $update = json_decode(file_get_contents('php://input'));
 
     if(isset($update)){
         require 'bot/bot.php';
         return;
     }
 
-    $database = DB::connect();
-    $todo = new Todo($database);
-    $todos = $todo->getTodos();
+    require 'src/DB.php';
+    require 'src/Todo.php';    
 
-    require 'view/view.php';
-
-    require_once 'vendor/autoload.php';
-
-    use GuzzleHttp\Client;
+    $todo = new Todo();
     
-    $token = "7411716108:AAHie4mj97bbY6VWcUppRULe_aCOI7fCysY";
-    $tgApi = "https://api.telegram.org/bot$token/";
-    
-    $client = new Client(['base_uri' => $tgApi]);
-    
-    $update = json_decode(file_get_contents('php://input'));
-    
-    if (isset($update->message)){
-        $message = $update->message;
-        $chat_id = $message->chat->id;
-        $text = $message->text;
-    
-        if ($message->text === '/start')
-        {
-            $client->post('sendMessage', [
-                'form_params' => [
-                    'chat_id' => $chat_id,
-                    'text' => 'Assalomu aleykum',
-                ]
-            ]);
-        } else if ($message->text === '/stop')
-        {
-            $client->post('sendMessage', [
-                'form_params' => [
-                    'chat_id' => $chat_id,
-                    'text' => 'Xayr',
-                ]
-            ]);
-        } else if ($message->text === '/add')
-        {
-            $client->post('sendMessage', [
-                'form_params' => [
-                    'chat_id' => $chat_id,
-                    'text' => 'Please, enter your new task : ',
-                ]
-            ]);
-        } 
+    if (!empty($_POST)){
+        if (strlen($_POST['text'])){
+            $todo->addTodo($_POST['text']);
+            header('Location: index.php');
+        }
     }
 
+    if (!empty($_GET)){
+        if (isset($_GET['update'])){
+            $todo->updateStatus($_GET['update']);
+        }
+
+        if (isset($_GET['delete'])){
+            $todo->deleteTodo($_GET['delete']);
+        }
+        require 'view/view.php';
+
+    }
