@@ -1,7 +1,7 @@
 <?php
 
-require 'DB.php';
-require 'Todo.php';
+require 'src/DB.php';
+require 'src/Todo.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pdo = DB::connect();

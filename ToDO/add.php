@@ -1,5 +1,5 @@
 <?php
-require 'DB.php';
+require 'src/DB.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pdo = DB::connect();

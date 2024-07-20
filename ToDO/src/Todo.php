@@ -1,6 +1,6 @@
 <?php
 
-class Todo
+class Todo extends DB
 {
     private $pdo;
 

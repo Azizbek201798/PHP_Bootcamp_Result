@@ -1,6 +1,6 @@
 <?php
-require 'DB.php';
-require 'Todo.php';
+require 'src/DB.php';
+require 'src/Todo.php';
 
 $pdo = DB::connect();
 $todo = new Todo($pdo);
