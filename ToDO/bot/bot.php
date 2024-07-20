@@ -6,9 +6,10 @@ if (isset($update->message)){
     $text = $message->text;
 
     $bot = new Bot();
-    // $user = new User();
+    $todo = new Todo();
+    $user = new User();
 
-    if ($message->text === '/start')
+    if ($text === '/start')
     {
         $user->save_user($chat_id);
         $bot->startHandlerCommand($chat_id);

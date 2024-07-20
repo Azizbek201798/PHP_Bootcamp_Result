@@ -1,7 +1,7 @@
 <?php
-    require 'src/DB.php';
-    require 'src/Todo.php';
-    require 'bot/bot.php';
+    
+    require 'vendor/autoload.php';
+
 
     if(isset($update)){
         require 'bot/bot.php';
@@ -51,7 +51,7 @@
             $client->post('sendMessage', [
                 'form_params' => [
                     'chat_id' => $chat_id,
-                    'text' => 'Please, enter your ',
+                    'text' => 'Please, enter your new task : ',
                 ]
             ]);
         } 

@@ -2,12 +2,6 @@
 
 class Todo extends DB
 {
-    private $pdo;
-
-    public function __construct($pdo)
-    {
-        $this->pdo = $pdo;
-    }
 
     public function getTodos()
     {
@@ -15,10 +9,13 @@ class Todo extends DB
         return $stmt->fetchAll();
     }
 
-    public function addTodo($title)
+    public function addTodo(string $title)
     {
-        $stmt = $this->pdo->prepare('INSERT INTO todos (title) VALUES (?)');
-        $stmt->execute([$title]);
+        $status = false;
+        $stmt = $this->pdo->prepare('INSERT INTO todos (title,status) VALUES (:title,:completed)');
+        $stmt->bindParam(':title',$title);
+        $stmt->bindParam(':status',$status,PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     public function updateStatus($id)
