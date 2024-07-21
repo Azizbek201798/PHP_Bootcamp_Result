@@ -7,7 +7,7 @@ require 'SaveUserData.php';
 date_default_timezone_set('Asia/Tashkent');
 
 use GuzzleHttp\Client;
-
+// dasd
 $token = "7284381414:AAHv-6aSoVU2c98Z3MQug0WuEotG_qPt75o";
 $tgApi = "https://api.telegram.org/bot$token/";
 
