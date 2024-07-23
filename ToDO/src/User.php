@@ -12,6 +12,7 @@ class User extends DB
         return $result;
     }
 
+    // add
     public function addTask(string $text)
     {
         $query = "INSERT INTO users (`add`) VALUES (:add)";
@@ -49,6 +50,7 @@ class User extends DB
         $stmt->execute();
     }
 
+    //check
     public function checkTask(string $text)
     {
         $query = "INSERT INTO users (`check`) VALUES (:check)";
@@ -106,6 +108,7 @@ class User extends DB
         $stmt->execute();
     }
 
+    //uncheck
 
     public function uncheckTask(string $text)
     {
@@ -162,6 +165,8 @@ class User extends DB
         $stmt->bindParam(':value', $value);
         $stmt->execute();
     }
+
+    //delete
 
     public function writeDelete(string $text)
     {
