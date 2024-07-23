@@ -11,10 +11,20 @@ $todos = $todo->getTodos();
 
 $update = json_decode(file_get_contents('php://input'));
 
-if (isset($update)) {
-    require 'bot/bot.php';
-    return;
+if(isset($update)){
+    
+    if(isset($update->update_id)){
+        require 'bot/bot.php';
+        return;
+    }
+
+    $path = parse_url($_SERVER['REQUEST_URI'])['path'];
+    
+    if($path === 'add'){
+        $task->add($update->text,$update->userId);
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
