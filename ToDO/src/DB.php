@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 class DB
 {
-
-    protected $pdo;
-
-    public function __construct(){
-        return $this->pdo = new PDO('msql:host=localhost;dbname=Workly','root','root');
+    public static function connect(): PDO
+    {
+        $pdo = new PDO(
+            "mysql:host=localhost;dbname=Workly",
+            'root',
+            'root',
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]
+        );
+        return $pdo;
     }
-    
 }
