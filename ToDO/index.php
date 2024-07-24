@@ -6,7 +6,7 @@ date_default_timezone_set("Asia/Tashkent");
 $database = DB::connect();
 $todo = new Todo($database);
 $todos = $todo->getTodos();
-
+$user = new User();
 $update = json_decode(file_get_contents('php://input'));
 
 $path = parse_url($_SERVER['REQUEST_URI'])['path'];
@@ -20,13 +20,16 @@ if(isset($update)){
         $todo->addTodo($update->text);
         return;
     }elseif($path === '/getall'){
-        print_r($todo->getTodos());
+        print_r($user->getAllUsers());
         return;
     }elseif($path === '/delete'){
-        $todo->deleteTodo($update->update_id);
+        $todo->deleteTodo($update->message->text - 1);
         return;
-}
-
+    }elseif($path === '/check'){
+        '';
+    }elseif($path === '/uncheck'){
+        '';
+    }
 }
 
 require 'index.php';

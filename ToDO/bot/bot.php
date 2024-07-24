@@ -78,7 +78,7 @@ if (isset($update->message)) {
     }
 
     if ($text === 'Get All Tasks') {
-        $tasks = $user->SendAllUsers();
+        $tasks = $user->getAllUsers();
         $responseText = '';
         $count = 1;
 

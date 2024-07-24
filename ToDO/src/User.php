@@ -2,7 +2,7 @@
 
 class User extends DB
 {
-    public function SendAllUsers()
+    public function getAllUsers()
     {
         $query = "SELECT * FROM todos";
         $stmt = $this->connect()->prepare($query);
