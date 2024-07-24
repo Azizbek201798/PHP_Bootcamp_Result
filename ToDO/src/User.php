@@ -67,7 +67,7 @@ class User extends DB
         return $result;
     }
 
-    public function saveCheck(int $text)
+    public function check(int $text)
     {
         $completed = 1;
         $offset = 0;
@@ -123,7 +123,7 @@ class User extends DB
         return $result;
     }
 
-    public function saveUncheck(int $text)
+    public function uncheck(int $text)
     {
         $completed = 0;
         $offset = 0;

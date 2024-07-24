@@ -2,11 +2,12 @@
     require 'vendor/autoload.php';
     require 'src/DB.php';
     require 'src/Todo.php';
+$user = new User();
+
 date_default_timezone_set("Asia/Tashkent");
 $database = DB::connect();
 $todo = new Todo($database);
 $todos = $todo->getTodos();
-$user = new User();
 $update = json_decode(file_get_contents('php://input'));
 
 $path = parse_url($_SERVER['REQUEST_URI'])['path'];
@@ -26,9 +27,9 @@ if(isset($update)){
         $user->delete($update->message->text - 1);
         return;
     }elseif($path === '/check'){
-        '';
+        $user->check($update->message->text - 1);
     }elseif($path === '/uncheck'){
-        '';
+        $user->uncheck($update->message->text - 1);
     }
 }
 

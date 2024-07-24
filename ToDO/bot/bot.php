@@ -129,7 +129,7 @@ if ($text) {
 
     $check = $user->getCheck();
     if ($check[0]['check'] == 'check') {
-        $user->saveCheck((int)$text);
+        $user->check((int)$text);
         $user->deleteCheck();
         $client->post('sendMessage', [
             'form_params' => [
@@ -142,7 +142,7 @@ if ($text) {
 
     $uncheck = $user->getUncheck();
     if ($uncheck[0]['uncheck'] == 'uncheck') {
-        $user->saveUncheck((int)$text);
+        $user->uncheck((int)$text);
         $user->deleteUncheck();
         $client->post('sendMessage', [
             'form_params' => [
