@@ -155,7 +155,7 @@ if ($text) {
 
     $delete = $user->getDelete();
     if ($delete[0]['delete'] == 'delete') {
-        $user->saveDelete((int)$text - 1);
+        $user->delete((int)$text - 1);
         $user->dropDelete();
         $client->post('sendMessage', [
             'form_params' => [

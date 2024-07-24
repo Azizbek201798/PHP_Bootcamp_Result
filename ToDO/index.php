@@ -23,7 +23,7 @@ if(isset($update)){
         print_r($user->getAllUsers());
         return;
     }elseif($path === '/delete'){
-        $todo->deleteTodo($update->message->text - 1);
+        $user->delete($update->message->text - 1);
         return;
     }elseif($path === '/check'){
         '';

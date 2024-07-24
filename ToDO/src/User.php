@@ -179,7 +179,7 @@ class User extends DB
         return $result;
     }
 
-    public function saveDelete(int $offset)
+    public function delete(int $offset)
     {
         $stmtSub = $this->connect()->prepare("
         SELECT id
