@@ -3,13 +3,12 @@
 declare(strict_types=1);
 use GuzzleHttp\Client;
 require 'vendor/autoload.php';
-
-$user = new User();
-
 $token = "7411716108:AAHie4mj97bbY6VWcUppRULe_aCOI7fCysY";
 $tgApi = "https://api.telegram.org/bot$token/";
 
 $client = new Client(['base_uri' => $tgApi]);
+
+$user = new User();
 $update = json_decode(file_get_contents('php://input'));
 
 if (isset($update)) {
@@ -102,60 +101,6 @@ if (isset($update)) {
             'form_params' => [
                 'chat_id' => $chat_id,
                 'text' => 'Enter the number to delete'
-            ]
-        ]);
-        return;
-    }
-}
-
-if ($text) {
-    $add = $user->getAdd();
-    if ($add[0]['add'] == 'add') {
-        $user->saveAdd($text);
-        $user->deleteAdd();
-        $client->post('sendMessage', [
-            'form_params' => [
-                'chat_id' => $chat_id,
-                'text' => 'Task added successfully'
-            ]
-        ]);
-        return;
-    }
-
-    $check = $user->getCheck();
-    if ($check[0]['check'] == 'check') {
-        $user->check((int)$text);
-        $user->deleteCheck();
-        $client->post('sendMessage', [
-            'form_params' => [
-                'chat_id' => $chat_id,
-                'text' => 'Task checked successfully'
-            ]
-        ]);
-        return;
-    }
-
-    $uncheck = $user->getUncheck();
-    if ($uncheck[0]['uncheck'] == 'uncheck') {
-        $user->uncheck((int)$text);
-        $user->deleteUncheck();
-        $client->post('sendMessage', [
-            'form_params' => [
-                'chat_id' => $chat_id,
-                'text' => 'Task unchecked successfully'
-            ]
-        ]);
-        return;
-    }
-
-    $delete = $user->getDelete();
-    if ($delete[0]['delete'] == 'delete') {
-        $user->delete((int)$text - 1);
-        $user->dropDelete();
-        $client->post('sendMessage', [
-            'form_params' => [
-                'chat_id' => $chat_id,
-                'text' => 'Task deleted successfully'
             ]
         ]);
         return;
