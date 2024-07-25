@@ -29,7 +29,7 @@
                 <form action="actions.php" method="POST" class="mr-3">
                     <input type="hidden" name="action" value="toggle">
                     <input type="hidden" name="id" value="--><?php echo $todo['id']; ?>
-                    <input type="checkbox" onChange="this.form.submit()" --><?php if ($todo['completed']) echo 'checked'; ?>
+                    <input type="checkbox onChange="this.form.submit()" --><?php if ($todo['completed']) echo 'checked'; ?>
                 </form>
                 <span class="--><?php echo $todo['completed'] ? 'completed' : ''; ?>
                     <?php echo htmlspecialchars($todo['title']); ?>
