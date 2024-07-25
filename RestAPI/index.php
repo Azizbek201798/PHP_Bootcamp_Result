@@ -28,4 +28,8 @@ if($router->isApiCall()){
 
 }
 
+if($router->isTelegramUpdate()){
+    echo "Telegram";
+}
 
+echo "WEB";
