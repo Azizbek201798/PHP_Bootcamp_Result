@@ -3,12 +3,14 @@
 declare(strict_types=1);
 use GuzzleHttp\Client;
 require 'vendor/autoload.php';
+
 $token = "7411716108:AAHie4mj97bbY6VWcUppRULe_aCOI7fCysY";
 $tgApi = "https://api.telegram.org/bot$token/";
+
 $router = new Router();
 $client = new Client(['base_uri' => $tgApi]);
-
 $user = new User();
+
 $update = json_decode(file_get_contents('php://input'));
 
 if($router->isTelegramUpdate()){
@@ -21,7 +23,7 @@ if($router->isTelegramUpdate()){
             ['Check Task', 'Uncheck Task'],
             ['Delete Task']
         ];
-    
+
         $reply_markup = json_encode([
             'keyboard' => $keyboard,
             'resize_keyboard' => true,
