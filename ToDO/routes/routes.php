@@ -1,30 +1,65 @@
 <?php
 
-class Router{
-    public $updates;
-    public function __construct(){
-        $this->updates = json_decode(file_get_contents("php://input"));
-    }
+declare(strict_types=1);
 
-    public function isApiCall()
-    {
-        $url = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
-        $path = explode('/',$url);
-        return array_search('api',$path);
-    }
+require 'vendor/autoload.php';
 
-    public function getResourceId()
-    {
-        $url = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
-        $path = explode('/',$url);
-        $resourceId = $path[count($path) - 1];
-        return is_numeric($resourceId ? $resourceId : false);
-    }
+$router = new Router();
+$db = DB::connect();
+$todo = new Todo($db);
+$requestMethod = $_SERVER['REQUEST_METHOD'];
 
-    public function isTelegramUpdate(){
-        if(isset($this->updates->update_id)){
-            return true;
+if($router->isApiCall()){
+
+    if($requestMethod == 'GET'){
+        $router->sendResponse($todo->getTodos());
+        return;
+    } // DONE;
+    
+    if($requestMethod == 'POST'){
+        if(!isset($router->getUpdates()->text)){
+            $router->sendResponse([
+                'message' => 'text is not found',
+                'code' => 403,
+            ]);
+            return;
         }
-        return false;
+
+        $todo->addTodo($router->getUpdates()->text);
+        $res = $todo ? "Added to database" : "Something went wrong";
+        $router->sendResponse($res);
+        return;        
+    } // DONE;
+
+    if($requestMethod == 'PATCH'){
+        $id = $router->getUpdates()->taskId;
+        var_dump($id);
+        if(!isset($id)){
+            $router->sendResponse([
+                'message' => 'Id not found',
+                'code' => 403,
+            ]);
+        }
+        $todo->changeStatus($id);
+        return;
+    }   // NOT;
+
+    if($requestMethod == 'DELETE'){
+        $id = $router->getUpdates()->taskId;
+        if(!$id){
+            $router->sendResponse([
+                'message' => 'id not found',
+                'code' => 403,
+            ]);
+        }
+        $todo->deleteTodo($id);
+        return;
     }
+    // DONE;
 }
+
+if($router->isTelegramUpdate()){
+    echo "";
+}
+
+echo "WEB";

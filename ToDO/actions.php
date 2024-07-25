@@ -1,4 +1,5 @@
 <?php
+
 require 'src/DB.php';
 require 'src/Todo.php';
 
@@ -12,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $todo->addTodo($_POST['title']);
                 break;
             case 'toggle':
-                $todo->toggleTodoStatus((int)$_POST['id']);
+                $todo->changeStatus((int)$_POST['id']);
                 break;
         }
     }

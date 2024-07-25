@@ -11,8 +11,14 @@ class Todo
 
     public function getTodos()
     {
-        $stmt = $this->pdo->query('SELECT * FROM todos');
-        return $stmt->fetchAll();
+        try {
+            $stmt = $this->pdo->query('SELECT * FROM todos;');
+            var_dump($stmt->fetchAll());
+        } catch (\Throwable $th) {
+            echo $th->getMessage();
+            print_r($th->getTrace());
+            print_r($th->getLine());
+        }
     }
 
     public function addTodo($title)
@@ -21,13 +27,13 @@ class Todo
         $stmt->execute([$title]);
     }
 
-    public function toggleTodoStatus($id)
+    public function changeStatus($id)
     {
+        $id = (int)$id;
         $stmt = $this->pdo->prepare('SELECT completed FROM todos WHERE id = ?');
         $stmt->execute([$id]);
         $todo = $stmt->fetch();
         $newStatus = $todo['completed'] ? 0 : 1;
-
         $stmt = $this->pdo->prepare('UPDATE todos SET completed = ? WHERE id = ?');
         $stmt->execute([$newStatus, $id]);
     }
