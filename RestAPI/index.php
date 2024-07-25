@@ -1,20 +1,21 @@
 <?php
 
-class Router{
-    public $updates;
-    public function __construct(){
-        $this->updates = json_decode(file_get_contents("php://input"));
-    }
+declare(strict_types=1);
 
-    public function isApiCall(){
-        $uri = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH);
-        $path = explode('/',$uri);
-        return array_search('api',$path);
-    }
+require 'vendor/autoload.php';
 
-    public function getResourceId(){
-        
-    }
+$router = new Router();
 
+$update = json_decode(file_get_contents("php://input"),true);
+
+$requestMethod = $_SERVER['REQUEST_METHOD'];
+
+if($router->isApiCall()){
+    if($requestMethod == 'GET'){
+        if($router->getResourceId()){
+            echo "Task " . $router->getResourceId();
+        }
+        echo "All Tasks";
+    }
 
 }

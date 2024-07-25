@@ -6,8 +6,12 @@
             "email": "ziyodulayeva9@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "guzzlehttp/guzzle": "^7.9"
+    },
+    "autoload": {
     "classmap":[
         "."
     ]
+    }
 }
