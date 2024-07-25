@@ -5,27 +5,28 @@ use GuzzleHttp\Client;
 require 'vendor/autoload.php';
 $token = "7411716108:AAHie4mj97bbY6VWcUppRULe_aCOI7fCysY";
 $tgApi = "https://api.telegram.org/bot$token/";
-
+$router = new Router();
 $client = new Client(['base_uri' => $tgApi]);
 
 $user = new User();
 $update = json_decode(file_get_contents('php://input'));
 
-if (isset($update)) {
-    $message = $update->message->text;
-    $chat_id = $update->message->chat->id;
-    $text = $message->text;
-    $keyboard = [
-        ['Add Task', 'Get All Tasks'],
-        ['Check Task', 'Uncheck Task'],
-        ['Delete Task']
-    ];
-
-    $reply_markup = json_encode([
-        'keyboard' => $keyboard,
-        'resize_keyboard' => true,
-        'one_time_keyboard' => true
-    ]);
+if($router->isTelegramUpdate()){
+    if (isset($update)) {
+        $message = $update->message->text;
+        $chat_id = $update->message->chat->id;
+        $text = $message->text;
+        $keyboard = [
+            ['Add Task', 'Get All Tasks'],
+            ['Check Task', 'Uncheck Task'],
+            ['Delete Task']
+        ];
+    
+        $reply_markup = json_encode([
+            'keyboard' => $keyboard,
+            'resize_keyboard' => true,
+            'one_time_keyboard' => true
+        ]);
 
     if ($text === '/start') {
         $client->post('sendMessage', [
@@ -105,4 +106,5 @@ if (isset($update)) {
         ]);
         return;
     }
+}
 }
