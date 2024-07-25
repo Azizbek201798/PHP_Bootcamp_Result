@@ -1,8 +1,8 @@
 <?php
+
     require 'vendor/autoload.php';
     require 'src/DB.php';
     require 'src/Todo.php';
-$user = new User();
 
 date_default_timezone_set("Asia/Tashkent");
 $database = DB::connect();
@@ -21,15 +21,13 @@ if(isset($update)){
         $todo->addTodo($update->text);
         return;
     }elseif($path === '/getall'){
-        print_r($user->getAllUsers());
+        print_r($todo->getTodos());
         return;
     }elseif($path === '/delete'){
-        $user->delete($update->message->text - 1);
+        $todo->deleteTodo($update->message->text - 1);
         return;
     }elseif($path === '/check'){
-        $user->check($update->message->text - 1);
-    }elseif($path === '/uncheck'){
-        $user->uncheck($update->message->text - 1);
+        $todo->toggleTodoStatus($update->message->text - 1);
     }
 }
 

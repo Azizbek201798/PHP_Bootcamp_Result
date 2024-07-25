@@ -1,5 +1,15 @@
 {
-    "require": {
-        "guzzlehttp/guzzle": "^7.9"
+    "name": "azizbek/to-do",
+    "authors": [
+        {
+            "name": "Azizbek201798",
+            "email": "ziyodulayeva9@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "classmap":[
+            "."
+        ]
     }
 }

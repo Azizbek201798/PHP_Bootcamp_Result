@@ -1,0 +1,13 @@
+{
+    "name": "azizbek/rest-api",
+    "authors": [
+        {
+            "name": "Azizbek201798",
+            "email": "ziyodulayeva9@gmail.com"
+        }
+    ],
+    "require": {},
+    "classmap":[
+        "."
+    ]
+}
