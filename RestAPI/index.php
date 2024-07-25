@@ -16,6 +16,16 @@ if($router->isApiCall()){
             echo "Task " . $router->getResourceId();
         }
         echo "All Tasks";
+    } 
+    
+    if($requestMethod == 'POST'){
+        echo "New info";
+    }
+
+    if($requestMethod == 'PATCH'){
+        echo "Resource : " . $router->getResourceId() . " updated!";
     }
 
 }
+
+
