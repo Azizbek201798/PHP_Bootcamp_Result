@@ -9,6 +9,13 @@ class Todo
         $this->pdo = $pdo;
     }
 
+    public function checkId($id){
+        $stmt = $this->pdo->prepare('SELECT id FROM todos WHERE id = ?;');
+        $stmt->execute([$id]);
+        var_dump(count($stmt->fetchAll()));
+        return count($stmt->fetchAll());
+    }
+
     public function getTodos()
     {
         try {

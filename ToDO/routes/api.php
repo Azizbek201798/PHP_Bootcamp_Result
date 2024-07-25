@@ -33,8 +33,7 @@ if($router->isApiCall()){
 
     if($requestMethod == 'PATCH'){
         $id = $router->getUpdates()->taskId;
-        var_dump($id);
-        if(!isset($id)){
+        if(!isset($id) && $todo->checkId($id)){
             $router->sendResponse([
                 'message' => 'Id not found',
                 'code' => 403,
@@ -42,7 +41,7 @@ if($router->isApiCall()){
         }
         $todo->changeStatus($id);
         return;
-    }   // NOT;
+    }   // DONE;
 
     if($requestMethod == 'DELETE'){
         $id = $router->getUpdates()->taskId;
@@ -57,9 +56,3 @@ if($router->isApiCall()){
     }
     // DONE;
 }
-
-if($router->isTelegramUpdate()){
-    echo "";
-}
-
-echo "WEB";

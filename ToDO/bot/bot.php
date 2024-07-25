@@ -1,11 +1,8 @@
 <?php
 
 declare(strict_types=1);
-
 use GuzzleHttp\Client;
-
 require 'vendor/autoload.php';
-require 'src/User.php';
 
 $user = new User();
 
@@ -13,13 +10,12 @@ $token = "7411716108:AAHie4mj97bbY6VWcUppRULe_aCOI7fCysY";
 $tgApi = "https://api.telegram.org/bot$token/";
 
 $client = new Client(['base_uri' => $tgApi]);
-
 $update = json_decode(file_get_contents('php://input'));
 
-if (isset($update->message)) {
+if (isset($update)) {
     $message = $update->message->text;
     $chat_id = $update->message->chat->id;
-    $text = $update->message->text;
+    $text = $message->text;
 
     $keyboard = [
         ['Add Task', 'Get All Tasks'],
