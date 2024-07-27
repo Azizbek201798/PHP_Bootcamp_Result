@@ -1,10 +1,10 @@
 <?php
 
 declare(strict_types=1);
-use GuzzleHttp\Client;
 require 'vendor/autoload.php';
+use GuzzleHttp\Client;
 
-$token = "7411716108:AAHie4mj97bbY6VWcUppRULe_aCOI7fCysY";
+$token = $_ENV['TOKEN'];
 $tgApi = "https://api.telegram.org/bot$token/";
 
 $router = new Router();

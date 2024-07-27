@@ -1,12 +1,14 @@
 <?php
 
+require 'DB.php';
+
 class Todo
 {
     private $pdo;
 
     public function __construct($pdo)
     {
-        $this->pdo = $pdo;
+        $this->pdo = DB::connect();
     }
 
     public function checkId($id){

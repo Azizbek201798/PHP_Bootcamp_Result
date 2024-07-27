@@ -1,8 +1,10 @@
 <?php
-
     require 'vendor/autoload.php';
 
-    $update = json_decode(file_get_contents('php://input'),true);
+    use Dotenv\Dotenv;
+
+    $dotenv = Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
 
     require 'bootstrap.php';
     require 'routes/api.php';

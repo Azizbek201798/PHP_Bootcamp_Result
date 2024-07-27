@@ -21,5 +21,3 @@ if (count($_GET) > 0 || count($_POST) > 0) {
         $task->deleteTodo($_GET['delete']);
     }
 }
-
-require 'view/home.php';
