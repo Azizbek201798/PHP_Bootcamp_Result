@@ -15,5 +15,10 @@ class Task{
 
         header("Location: /");
     }
+    public function getAllTasks(){
+        $stmt = $this->pdo->query("SELECT * FROM posts");
+        $stmt->execute();
+        return $stmt->fetchAll();        
+    }
 
 }

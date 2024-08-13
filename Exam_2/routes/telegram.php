@@ -6,7 +6,6 @@ require 'vendor/autoload.php';
 $updates = json_decode(file_get_contents('php://input'));
 
 $bot = new Bot($_ENV['TOKEN']);
-$router = new Router();
 
 $users = $bot->getAllUsers();
 
