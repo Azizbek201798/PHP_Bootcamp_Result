@@ -91,6 +91,7 @@ class ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'Bot' => __DIR__ . '/../..' . '/src/Bot.php',
         'ComposerAutoloaderInit4b55c7ef33235a0353c1b6b079f86964' => __DIR__ . '/..' . '/composer/autoload_real.php',
         'Composer\\Autoload\\ClassLoader' => __DIR__ . '/..' . '/composer/ClassLoader.php',
         'Composer\\Autoload\\ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964' => __DIR__ . '/..' . '/composer/autoload_static.php',
@@ -256,7 +257,6 @@ class ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964
         'Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
         'Task' => __DIR__ . '/../..' . '/src/Task.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
-        'User' => __DIR__ . '/../..' . '/src/User.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
 

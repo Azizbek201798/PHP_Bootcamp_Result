@@ -13,6 +13,7 @@ class Task{
         $stmt->bindParam(":text",$text);
         $stmt->execute();
 
+        header("Location: /");
     }
 
 }
