@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MessDetectorOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCSFixerOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="highlightLevel" value="WARNING" />
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/Reja/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/Reja/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/Reja/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/Reja/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/Reja/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/Reja/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/Reja/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/Reja/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/Reja/vendor/composer" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/composer" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/Barselona/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/composer" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/vlucas/phpdotenv" />
+      <path value="$PROJECT_DIR$/Exam_2/vendor/graham-campbell/result-type" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/composer" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/ChPT_To_Do_bot/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/composer" />
+      <path value="$PROJECT_DIR$/RestAPI/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/composer" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/ToDO/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/composer" />
+      <path value="$PROJECT_DIR$/Tg_bot_Convertor/vendor/guzzlehttp/guzzle" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpStanOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PsalmOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+</project>
